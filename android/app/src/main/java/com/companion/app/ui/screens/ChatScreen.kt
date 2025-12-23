@@ -41,18 +41,23 @@ fun ChatScreen() {
         )
     }
     
+    // Coletar estados do ViewModel
+    val messages by viewModel.messages.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val requiresSupport by viewModel.requiresSupport.collectAsState()
+    
     var messageText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     
-    LaunchedEffect(viewModel.messages.size) {
-        if (viewModel.messages.isNotEmpty()) {
-            listState.animateScrollToItem(viewModel.messages.size - 1)
+    LaunchedEffect(messages.size) {
+        if (messages.isNotEmpty()) {
+            listState.animateScrollToItem(messages.size - 1)
         }
     }
     
     // Mostrar mensagem inicial do Companion
     LaunchedEffect(Unit) {
-        if (viewModel.messages.isEmpty()) {
+        if (messages.isEmpty()) {
             viewModel.addInitialMessage()
         }
     }
@@ -79,13 +84,13 @@ fun ChatScreen() {
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(viewModel.messages) { message ->
+            items(messages) { message ->
                 ChatBubble(message = message)
             }
         }
         
         // Aviso de suporte se necessário
-        if (viewModel.requiresSupport) {
+        if (requiresSupport) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -143,9 +148,9 @@ fun ChatScreen() {
                         messageText = ""
                     }
                 },
-                enabled = messageText.isNotBlank() && !viewModel.isLoading
+                enabled = messageText.isNotBlank() && !isLoading
             ) {
-                if (viewModel.isLoading) {
+                if (isLoading) {
                     CircularProgressIndicator(modifier = Modifier.size(24.dp))
                 } else {
                     Icon(Icons.Default.Send, contentDescription = "Enviar")
