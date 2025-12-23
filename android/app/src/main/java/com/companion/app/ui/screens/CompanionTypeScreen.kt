@@ -74,6 +74,7 @@ fun CompanionTypeScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompanionTypeOption(
     title: String,

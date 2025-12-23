@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvatarCreationScreen(
     onAvatarCreated: () -> Unit
