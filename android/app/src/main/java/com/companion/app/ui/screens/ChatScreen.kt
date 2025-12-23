@@ -21,6 +21,12 @@ import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
+data class ChatMessage(
+    val text: String,
+    val isUser: Boolean,
+    val emotion: String? = null
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatScreen() {
@@ -148,12 +154,6 @@ fun ChatScreen() {
         }
     }
 }
-
-data class ChatMessage(
-    val text: String,
-    val isUser: Boolean,
-    val emotion: String? = null
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
