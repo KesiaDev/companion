@@ -1,0 +1,15 @@
+# Uncomment the next line to define a global platform for your project
+platform :ios, '16.0'
+
+target 'Companion' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Networking
+  pod 'Alamofire', '~> 5.8'
+  
+  # JSON parsing
+  pod 'SwiftyJSON', '~> 5.0'
+
+end
+
