@@ -46,7 +46,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun CompanionTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Desabilitado para usar cores customizadas
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -62,8 +62,8 @@ fun CompanionTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+            window.statusBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 
