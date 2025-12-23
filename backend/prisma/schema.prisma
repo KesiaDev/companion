@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String?
+  age           Int?      // Para validação 18+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relacionamentos
+  avatar              Avatar?
+  companionPreferences CompanionPreferences?
+  memory              Memory?
+  conversations       Conversation[]
+  reports             Report[]
+  
+  @@map("users")
+}
+
+model Avatar {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  avatarName    String   // Nome do avatar
+  avatarStyle   String   // Estilo visual
+  avatarBodyType String  // Tipo de corpo
+  avatarFaceType String  // Tipo de rosto
+  avatarHair    String   // Cabelo
+  avatarSkinTone String  // Tom de pele
+  
+  pronouns      String?  // ele/dele, ela/dela, elu/delu, etc.
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("avatars")
+}
+
+enum CompanionType {
+  FRIEND        // Amigo(a)
+  CONFIDANT     // Confidente
+  NEUTRAL       // Companheiro emocional neutro
+}
+
+model CompanionPreferences {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  companionType CompanionType
+  conversationTone String // Calmo, Animado, Neutro, etc.
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("companion_preferences")
+}
+
+model Memory {
+  id            String   @id @default(cuid())
+  userId        String   @unique
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Memória básica
+  userName      String?
+  preferences   Json?    // Preferências de conversa (JSON flexível)
+  recurringThemes Json?  // Temas recorrentes
+  frequentEmotions Json? // Emoções frequentes
+  routine       Json?    // Rotina básica (manhã/noite)
+  
+  // Contexto evolutivo
+  lastInteraction DateTime?
+  interactionCount Int @default(0)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("memories")
+}
+
+model Conversation {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  userMessage   String
+  companionResponse String
+  emotion       String?  // Emoção detectada na mensagem do usuário
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([userId, createdAt])
+  @@map("conversations")
+}
+
+model Report {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type         String   // "inappropriate_content", "emotional_distress", "other"
+  description  String?
+  context      Json?    // Contexto adicional
+  
+  status       String   @default("pending") // pending, reviewed, resolved
+  
+  createdAt     DateTime @default(now())
+  reviewedAt    DateTime?
+  
+  @@map("reports")
+}
+
+// Estrutura preparada para Comunidade (Fase 2)
+model CommunityRoom {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  theme         String   // Tema da sala
+  isActive      Boolean  @default(true)
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  messages      CommunityMessage[]
+  
+  @@map("community_rooms")
+}
+
+model CommunityMessage {
+  id            String   @id @default(cuid())
+  roomId        String
+  room          CommunityRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  
+  userId        String   // Anônimo (apelido)
+  userNickname  String   // Apelido do usuário
+  content       String
+  isModerated   Boolean  @default(false)
+  
+  createdAt     DateTime @default(now())
+  
+  @@index([roomId, createdAt])
+  @@map("community_messages")
+}
+

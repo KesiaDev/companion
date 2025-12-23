@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude shared preferences that contain sensitive user information -->
+    <exclude domain="sharedpref" path="companion_prefs.xml"/>
+</full-backup-content>
+
