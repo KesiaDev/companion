@@ -6,7 +6,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://10.0.2.2:3000/api/" // Para emulador Android
+    // ⚠️ CONFIGURE AQUI A URL DO SEU SERVIDOR
+    // Para emulador Android: http://10.0.2.2:3001/api/
+    // Para dispositivo físico: http://SEU_IP_LOCAL:3001/api/
+    private const val BASE_URL = "http://10.0.2.2:3001/api/"
     
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -24,4 +27,5 @@ object RetrofitClient {
     
     val apiService: ApiService = retrofit.create(ApiService::class.java)
 }
+
 
