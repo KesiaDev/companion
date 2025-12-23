@@ -8,6 +8,7 @@ Aplicativo de companhia emocional contínua para adultos (18+).
 companion/
 ├── backend/          # API Node.js + Next.js
 ├── android/          # App Android (Kotlin + Jetpack Compose)
+├── ios/              # App iOS (Swift + SwiftUI) - requer Mac para compilar
 └── shared/           # Tipos e contratos compartilhados
 ```
 
@@ -65,4 +66,5 @@ cd android
 - Botão de denúncia
 - Mensagens de apoio em situações de sofrimento
 - Sugestão de ajuda humana quando necessário
+
 
