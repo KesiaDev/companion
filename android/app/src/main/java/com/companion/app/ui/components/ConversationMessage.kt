@@ -83,7 +83,8 @@ fun ConversationMessage(
                     lineHeight = 22.sp,
                     color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.9f),
                     fontWeight = FontWeight.Normal
-            )
+                )
+            }
         }
     }
 }
