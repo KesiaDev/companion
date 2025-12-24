@@ -45,8 +45,8 @@ class FirstConversationViewModel(
         }
     }
     
-    // Construtor para modo mockado
-    constructor(mockMode: Boolean) : this() {
+    // Construtor secundário para modo mockado (previews)
+    constructor(mockMode: Boolean) : this(null) {
         this.mockMode = mockMode
         if (mockMode) {
             loadMockConversation()

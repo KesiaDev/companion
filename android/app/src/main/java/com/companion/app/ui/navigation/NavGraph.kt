@@ -130,11 +130,13 @@ fun NavGraph() {
         }
         
         composable(Screen.FirstConversation.route) {
-            val memoryRepository = MemoryRepository() // Por enquanto instância local
+            // Por enquanto, criar instância local do repositório
+            // Futuramente, usar injeção de dependências (Koin)
+            val memoryRepository = MemoryRepository()
             val viewModel: FirstConversationViewModel = viewModel(
                 factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                    @Suppress("UNCHECKED_CAST")
                     override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-                        @Suppress("UNCHECKED_CAST")
                         return FirstConversationViewModel(memoryRepository) as T
                     }
                 }
