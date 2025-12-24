@@ -96,3 +96,53 @@ fun CustomizationChip(
     }
 }
 
+// ==================== PREVIEWS ====================
+
+@Preview(
+    name = "Chip - Não Selecionado",
+    showBackground = true
+)
+@Composable
+private fun CustomizationChipUnselectedPreview() {
+    CompanionTheme {
+        CustomizationChip(
+            label = "Casual",
+            icon = Icons.Default.Person,
+            isSelected = false,
+            onClick = { }
+        )
+    }
+}
+
+@Preview(
+    name = "Chip - Selecionado",
+    showBackground = true
+)
+@Composable
+private fun CustomizationChipSelectedPreview() {
+    CompanionTheme {
+        CustomizationChip(
+            label = "Casual",
+            icon = Icons.Default.Person,
+            isSelected = true,
+            onClick = { }
+        )
+    }
+}
+
+@Preview(
+    name = "Chip - Sem Ícone",
+    showBackground = true
+)
+@Composable
+private fun CustomizationChipNoIconPreview() {
+    CompanionTheme {
+        CustomizationChip(
+            label = "Médio",
+            icon = null,
+            isSelected = false,
+            onClick = { }
+        )
+    }
+}
+
