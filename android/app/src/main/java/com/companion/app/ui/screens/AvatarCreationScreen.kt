@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.companion.app.ui.components.AvatarPreview
+import com.companion.app.ui.components.UnityAvatarHostPlaceholder
 import com.companion.app.ui.components.CustomizationChip
 import com.companion.app.ui.components.SkinToneSelector
 import com.companion.app.ui.theme.CompanionTheme
@@ -85,14 +85,12 @@ fun AvatarCreationScreen(
         
         Spacer(modifier = Modifier.height(24.dp))
         
-        // Preview do Avatar (Elemento Principal)
-        AvatarPreview(
-            avatarName = avatarName,
-            style = selectedStyle,
-            bodyType = selectedBodyType,
-            faceType = selectedFaceType,
-            hair = selectedHair,
-            skinTone = selectedSkinTone
+        // Preview do Avatar (Unity - Elemento Principal)
+        UnityAvatarHostPlaceholder(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(280.dp),
+            emotionalState = com.companion.app.domain.model.AvatarEmotionalState.NEUTRAL
         )
         
         Spacer(modifier = Modifier.height(32.dp))
@@ -554,67 +552,18 @@ private fun AvatarCreationScreenFilledPreview() {
 }
 
 @Preview(
-    name = "Preview do Avatar - Completo",
+    name = "Unity Avatar - Placeholder",
     showBackground = true,
     widthDp = 360
 )
 @Composable
-private fun AvatarPreviewCompletePreview() {
+private fun UnityAvatarPlaceholderPreview() {
     CompanionTheme {
-        AvatarPreview(
-            avatarName = "Alex",
-            style = "Casual",
-            bodyType = "Médio",
-            faceType = "Oval",
-            hair = "Médio",
-            skinTone = "Médio"
-        )
-    }
-}
-
-@Preview(
-    name = "Preview do Avatar - Variações",
-    showBackground = true,
-    widthDp = 360
-)
-@Composable
-private fun AvatarPreviewVariationsPreview() {
-    CompanionTheme {
-        Column(
+        UnityAvatarHostPlaceholder(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp)
-        ) {
-            // Avatar 1: Claro, Curto, Redondo
-            AvatarPreview(
-                avatarName = "Sam",
-                style = "Formal",
-                bodyType = "Esguio",
-                faceType = "Redondo",
-                hair = "Curto",
-                skinTone = "Claro"
-            )
-            
-            // Avatar 2: Escuro, Longo, Quadrado
-            AvatarPreview(
-                avatarName = "Jordan",
-                style = "Relaxado",
-                bodyType = "Robusto",
-                faceType = "Quadrado",
-                hair = "Longo",
-                skinTone = "Escuro"
-            )
-            
-            // Avatar 3: Sem cabelo
-            AvatarPreview(
-                avatarName = "Taylor",
-                style = "Moderno",
-                bodyType = "Médio",
-                faceType = "Oval",
-                hair = "Sem cabelo",
-                skinTone = "Médio"
-            )
-        }
+                .height(280.dp),
+            emotionalState = com.companion.app.domain.model.AvatarEmotionalState.NEUTRAL
+        )
     }
 }

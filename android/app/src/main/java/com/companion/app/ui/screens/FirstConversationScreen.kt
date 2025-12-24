@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.companion.app.ui.components.ConversationMessage
-import com.companion.app.ui.components.PresenceAvatar
+import com.companion.app.ui.components.UnityAvatarHostPlaceholder
 import com.companion.app.ui.theme.CompanionTheme
 import com.companion.app.ui.viewmodel.FirstConversationViewModel
 import kotlinx.coroutines.delay
@@ -73,11 +73,16 @@ fun FirstConversationScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        // TOPO — PRESENÇA VISUAL
-        PresenceAvatar(
-            modifier = Modifier.fillMaxWidth(),
-            isListening = isListening,
-            isResponding = isResponding
+        // TOPO — PRESENÇA VISUAL (Unity Avatar)
+        UnityAvatarHostPlaceholder(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp),
+            emotionalState = when {
+                isListening -> com.companion.app.domain.model.AvatarEmotionalState.ATTENTIVE
+                isResponding -> com.companion.app.domain.model.AvatarEmotionalState.SMILING
+                else -> com.companion.app.domain.model.AvatarEmotionalState.NEUTRAL
+            }
         )
         
         Spacer(modifier = Modifier.height(8.dp))
