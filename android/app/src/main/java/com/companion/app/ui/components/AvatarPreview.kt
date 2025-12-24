@@ -113,14 +113,27 @@ fun AvatarPreview(
                 )
                 
                 // Olhos (com animação de piscar)
-                Box(
-                    modifier = Modifier
-                        .offset(y = (-8).dp)
-                        .size(16.dp, 8.dp)
-                        .scale(scaleY = blink)
-                        .clip(RoundedCornerShape(50))
-                        .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
-                )
+                Row(
+                    modifier = Modifier.offset(y = (-8).dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // Olho esquerdo
+                    Box(
+                        modifier = Modifier
+                            .size(12.dp, 8.dp)
+                            .scale(scaleY = blink)
+                            .clip(RoundedCornerShape(50))
+                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                    )
+                    // Olho direito
+                    Box(
+                        modifier = Modifier
+                            .size(12.dp, 8.dp)
+                            .scale(scaleY = blink)
+                            .clip(RoundedCornerShape(50))
+                            .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
+                    )
+                }
             }
             
             Spacer(modifier = Modifier.height(8.dp))
