@@ -4,12 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.companion.app.data.local.AvatarRepository
+import com.companion.app.data.local.MemoryRepository
 import com.companion.app.data.local.PreferencesManager
 import com.companion.app.ui.screens.*
+import com.companion.app.ui.viewmodel.FirstConversationViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
@@ -21,7 +25,9 @@ sealed class Screen(val route: String) {
     object CompanionType : Screen("companion_type")
     object ConversationTone : Screen("conversation_tone")
     object AvatarCreation : Screen("avatar_creation")
+    object FirstConversation : Screen("first_conversation")
     object Chat : Screen("chat")
+    object Community : Screen("community")
 }
 
 @Composable
@@ -116,8 +122,29 @@ fun NavGraph() {
         composable(Screen.AvatarCreation.route) {
             AvatarCreationScreen(
                 onAvatarCreated = {
-                    navController.navigate(Screen.Chat.route) {
+                    navController.navigate(Screen.FirstConversation.route) {
                         popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                }
+            )
+        }
+        
+        composable(Screen.FirstConversation.route) {
+            val memoryRepository = MemoryRepository() // Por enquanto instância local
+            val viewModel: FirstConversationViewModel = viewModel(
+                factory = object : androidx.lifecycle.ViewModelProvider.Factory {
+                    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                        @Suppress("UNCHECKED_CAST")
+                        return FirstConversationViewModel(memoryRepository) as T
+                    }
+                }
+            )
+            
+            FirstConversationScreen(
+                viewModel = viewModel,
+                onConversationStarted = {
+                    navController.navigate(Screen.Chat.route) {
+                        popUpTo(Screen.FirstConversation.route) { inclusive = true }
                     }
                 }
             )
@@ -125,6 +152,10 @@ fun NavGraph() {
         
         composable(Screen.Chat.route) {
             ChatScreen()
+        }
+        
+        composable(Screen.Community.route) {
+            CommunityPlaceholderScreen()
         }
     }
 }
