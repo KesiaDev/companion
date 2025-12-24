@@ -1,6 +1,12 @@
 package com.companion.app.ui.screens
 
+import androidx.compose.animation.core.animateContentSize
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -8,187 +14,273 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.companion.app.data.local.PreferencesManager
-import com.companion.app.data.remote.RetrofitClient
-import androidx.compose.ui.platform.LocalContext
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import com.companion.app.ui.components.AvatarPreview
+import com.companion.app.ui.components.CustomizationChip
+import com.companion.app.ui.components.SkinToneSelector
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvatarCreationScreen(
     onAvatarCreated: () -> Unit
 ) {
-    val context = LocalContext.current
-    val preferencesManager = PreferencesManager(context)
-    
+    // Estados
     var avatarName by remember { mutableStateOf("") }
+    var pronouns by remember { mutableStateOf("") }
     var selectedStyle by remember { mutableStateOf("") }
     var selectedBodyType by remember { mutableStateOf("") }
     var selectedFaceType by remember { mutableStateOf("") }
     var selectedHair by remember { mutableStateOf("") }
     var selectedSkinTone by remember { mutableStateOf("") }
-    var pronouns by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     
-    val styles = listOf("Casual", "Formal", "Relaxado", "Moderno")
+    // Opções
+    val styles = listOf(
+        "Casual" to Icons.Default.Person,
+        "Formal" to Icons.Default.Work,
+        "Relaxado" to Icons.Default.Home,
+        "Moderno" to Icons.Default.Star
+    )
+    
     val bodyTypes = listOf("Médio", "Esguio", "Robusto")
     val faceTypes = listOf("Redondo", "Oval", "Quadrado", "Alongado")
     val hairOptions = listOf("Curto", "Médio", "Longo", "Sem cabelo")
-    val skinTones = listOf("Claro", "Médio", "Escuro", "Muito escuro")
+    val pronounsOptions = listOf("Ela/Dela", "Ele/Dele", "Elu/Delu", "Personalizado")
+    
+    val isFormValid = avatarName.isNotBlank() &&
+            selectedStyle.isNotBlank() &&
+            selectedBodyType.isNotBlank() &&
+            selectedFaceType.isNotBlank() &&
+            selectedHair.isNotBlank() &&
+            selectedSkinTone.isNotBlank()
     
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 24.dp)
     ) {
-        Text(
-            text = "Crie seu Companion",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Bold
-        )
+        Spacer(modifier = Modifier.height(16.dp))
         
-        Spacer(modifier = Modifier.height(8.dp))
-        
-        Text(
-            text = "Personalize o avatar do seu companheiro",
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-        )
+        // Header
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Crie seu Companion",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Personalize o avatar do seu companheiro",
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
         
         Spacer(modifier = Modifier.height(24.dp))
         
-        // Nome do avatar
-        OutlinedTextField(
-            value = avatarName,
-            onValueChange = { avatarName = it },
-            label = { Text("Nome do avatar") },
-            modifier = Modifier.fillMaxWidth()
+        // Preview do Avatar (Elemento Principal)
+        AvatarPreview(
+            avatarName = avatarName,
+            style = selectedStyle,
+            bodyType = selectedBodyType,
+            faceType = selectedFaceType,
+            hair = selectedHair,
+            skinTone = selectedSkinTone
         )
         
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         
-        // Pronomes
-        OutlinedTextField(
-            value = pronouns,
-            onValueChange = { pronouns = it },
-            label = { Text("Pronomes (ex: ele/dele, ela/dela)") },
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Opcional") }
-        )
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // Estilo
-        Text("Estilo", fontWeight = FontWeight.Medium)
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        // Formulário de Personalização
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .animateContentSize(),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            styles.forEach { style ->
-                FilterChip(
-                    selected = selectedStyle == style,
-                    onClick = { selectedStyle = style },
-                    label = { Text(style) }
+            // A. Nome do avatar
+            OutlinedTextField(
+                value = avatarName,
+                onValueChange = { avatarName = it },
+                label = { Text("Nome do avatar") },
+                placeholder = { Text("Ex: Alex, Sam, Jordan") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
                 )
+            )
+            
+            // B. Pronomes
+            var pronounsExpanded by remember { mutableStateOf(false) }
+            ExposedDropdownMenuBox(
+                expanded = pronounsExpanded,
+                onExpandedChange = { pronounsExpanded = !pronounsExpanded }
+            ) {
+                OutlinedTextField(
+                    value = pronouns,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text("Pronomes") },
+                    placeholder = { Text("Selecione os pronomes") },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = pronounsExpanded) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f),
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                    )
+                )
+                ExposedDropdownMenu(
+                    expanded = pronounsExpanded,
+                    onDismissRequest = { pronounsExpanded = false }
+                ) {
+                    pronounsOptions.forEach { option ->
+                        DropdownMenuItem(
+                            text = { Text(option) },
+                            onClick = {
+                                pronouns = option
+                                pronounsExpanded = false
+                            }
+                        )
+                    }
+                }
             }
+            
+            // C. Estilo (chips com ícones)
+            SectionTitle("Estilo")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                styles.forEach { (style, icon) ->
+                    CustomizationChip(
+                        label = style,
+                        icon = icon,
+                        isSelected = selectedStyle == style,
+                        onClick = { selectedStyle = style },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            
+            // D. Tipo de Corpo (silhuetas)
+            SectionTitle("Tipo de corpo")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                bodyTypes.forEach { type ->
+                    CustomizationChip(
+                        label = type,
+                        isSelected = selectedBodyType == type,
+                        onClick = { selectedBodyType = type },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            
+            // E. Tipo de Rosto (geométrico)
+            SectionTitle("Tipo de rosto")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                faceTypes.forEach { type ->
+                    val icon = when (type) {
+                        "Redondo" -> Icons.Default.Circle
+                        "Oval" -> Icons.Default.Lens
+                        "Quadrado" -> Icons.Default.CropSquare
+                        "Alongado" -> Icons.Default.CropFree
+                        else -> Icons.Default.Circle
+                    }
+                    CustomizationChip(
+                        label = type,
+                        icon = icon,
+                        isSelected = selectedFaceType == type,
+                        onClick = { selectedFaceType = type },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            
+            // F. Cabelo
+            SectionTitle("Cabelo")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                hairOptions.forEach { hair ->
+                    CustomizationChip(
+                        label = hair,
+                        isSelected = selectedHair == hair,
+                        onClick = { selectedHair = hair },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            
+            // G. Tom de Pele
+            SectionTitle("Tom de pele")
+            SkinToneSelector(
+                selectedTone = selectedSkinTone,
+                onToneSelected = { selectedSkinTone = it },
+                modifier = Modifier.fillMaxWidth()
+            )
         }
         
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         
-        // Tipo de corpo
-        Text("Tipo de corpo", fontWeight = FontWeight.Medium)
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            bodyTypes.forEach { type ->
-                FilterChip(
-                    selected = selectedBodyType == type,
-                    onClick = { selectedBodyType = type },
-                    label = { Text(type) }
-                )
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // Tipo de rosto
-        Text("Tipo de rosto", fontWeight = FontWeight.Medium)
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            faceTypes.forEach { type ->
-                FilterChip(
-                    selected = selectedFaceType == type,
-                    onClick = { selectedFaceType = type },
-                    label = { Text(type) }
-                )
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // Cabelo
-        Text("Cabelo", fontWeight = FontWeight.Medium)
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            hairOptions.forEach { hair ->
-                FilterChip(
-                    selected = selectedHair == hair,
-                    onClick = { selectedHair = hair },
-                    label = { Text(hair) }
-                )
-            }
-        }
-        
-        Spacer(modifier = Modifier.height(16.dp))
-        
-        // Tom de pele
-        Text("Tom de pele", fontWeight = FontWeight.Medium)
-        Spacer(modifier = Modifier.height(8.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            skinTones.forEach { tone ->
-                FilterChip(
-                    selected = selectedSkinTone == tone,
-                    onClick = { selectedSkinTone = tone },
-                    label = { Text(tone) }
-                )
-            }
-        }
-        
-        Spacer(modifier = Modifier.weight(1f))
-        
+        // Botão Final
         Button(
             onClick = {
                 isLoading = true
-                // TODO: Implementar salvamento via OnboardingViewModel
-                // Por enquanto, apenas navega
+                // TODO: Salvar via API
                 onAvatarCreated()
             },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading && avatarName.isNotBlank() && 
-                     selectedStyle.isNotBlank() && selectedBodyType.isNotBlank() &&
-                     selectedFaceType.isNotBlank() && selectedHair.isNotBlank() &&
-                     selectedSkinTone.isNotBlank()
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            enabled = isFormValid && !isLoading,
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant
+            )
         ) {
             if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             } else {
-                Text("Criar Companion")
+                Text(
+                    text = "Criar Companion",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
+        
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
+@Composable
+private fun SectionTitle(text: String) {
+    Text(
+        text = text,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium,
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+        modifier = Modifier.padding(bottom = 8.dp)
+    )
+}
