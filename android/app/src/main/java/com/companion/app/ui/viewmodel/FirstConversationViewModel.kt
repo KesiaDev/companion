@@ -24,12 +24,52 @@ class FirstConversationViewModel : ViewModel() {
     private val _isListening = MutableStateFlow(false)
     val isListening: StateFlow<Boolean> = _isListening.asStateFlow()
     
+    // Modo mockado para previews
+    var mockMode: Boolean = false
+    
     init {
         // Adicionar mensagem inicial após um delay
         viewModelScope.launch {
             delay(2000) // Aguardar animações de boas-vindas
             addInitialMessage()
         }
+    }
+    
+    // Construtor para modo mockado
+    constructor(mockMode: Boolean) : this() {
+        this.mockMode = mockMode
+        if (mockMode) {
+            loadMockConversation()
+        }
+    }
+    
+    private fun loadMockConversation() {
+        _messages.value = listOf(
+            ConversationMessage(
+                text = "Como você está se sentindo agora?",
+                isFromCompanion = true
+            ),
+            ConversationMessage(
+                text = "Estou me sentindo um pouco ansioso hoje.",
+                isFromCompanion = false
+            ),
+            ConversationMessage(
+                text = "Entendo. Obrigado por me contar.",
+                isFromCompanion = true
+            ),
+            ConversationMessage(
+                text = "Fico aqui com você.",
+                isFromCompanion = true
+            ),
+            ConversationMessage(
+                text = "Obrigado. Isso ajuda.",
+                isFromCompanion = false
+            ),
+            ConversationMessage(
+                text = "Quer me falar um pouco mais, ou prefere só conversar?",
+                isFromCompanion = true
+            )
+        )
     }
     
     private fun addInitialMessage() {

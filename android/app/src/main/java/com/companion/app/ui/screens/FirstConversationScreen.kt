@@ -14,8 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.offset
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -292,6 +291,165 @@ private fun FirstConversationScreenPreview() {
             viewModel = FirstConversationViewModel(),
             onConversationStarted = {}
         )
+    }
+}
+
+@Preview(
+    name = "Primeira Conversa - Com Mensagens Mockadas",
+    showBackground = true,
+    widthDp = 360,
+    heightDp = 800
+)
+@Composable
+private fun FirstConversationScreenWithMockMessagesPreview() {
+    CompanionTheme {
+        val mockViewModel = FirstConversationViewModel(mockMode = true)
+        
+        // Simular estado de conversa ativa
+        var showWelcome1 by remember { mutableStateOf(true) }
+        var showWelcome2 by remember { mutableStateOf(true) }
+        var showWelcome3 by remember { mutableStateOf(true) }
+        var showConversation by remember { mutableStateOf(true) }
+        
+        val messages by mockViewModel.messages.collectAsState()
+        val isResponding by mockViewModel.isResponding.collectAsState()
+        val isListening by mockViewModel.isListening.collectAsState()
+        
+        var messageText by remember { mutableStateOf("") }
+        val listState = rememberLazyListState()
+        
+        // Scroll para última mensagem
+        LaunchedEffect(messages.size) {
+            if (messages.isNotEmpty()) {
+                delay(100)
+                listState.animateScrollToItem(messages.size - 1)
+            }
+        }
+        
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Avatar
+            PresenceAvatar(
+                modifier = Modifier.fillMaxWidth(),
+                isListening = isListening,
+                isResponding = isResponding
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // Mensagens de boas-vindas (já visíveis)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                AnimatedWelcomeText(
+                    text = "Oi. Eu sou o Companion.",
+                    visible = showWelcome1,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Light
+                )
+                
+                Spacer(modifier = Modifier.height(12.dp))
+                
+                AnimatedWelcomeText(
+                    text = "Estou aqui para te acompanhar ao longo do seu dia.",
+                    visible = showWelcome2,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Normal
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                AnimatedWelcomeText(
+                    text = "Você pode conversar comigo sempre que quiser.",
+                    visible = showWelcome3,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(32.dp))
+            
+            // Área de conversa
+            if (showConversation) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    itemsIndexed(messages) { index, message ->
+                        ConversationMessage(
+                            text = message.text,
+                            isFromCompanion = message.isFromCompanion,
+                            animateEntry = false // Todas já visíveis no preview
+                        )
+                    }
+                    
+                    if (isResponding) {
+                        item {
+                            TypingIndicator()
+                        }
+                    }
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Campo de texto
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                OutlinedTextField(
+                    value = messageText,
+                    onValueChange = { messageText = it },
+                    modifier = Modifier.weight(1f),
+                    placeholder = {
+                        Text(
+                            text = "Escreva quando se sentir à vontade…",
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
+                            fontSize = 15.sp
+                        )
+                    },
+                    shape = RoundedCornerShape(24.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    singleLine = true,
+                    maxLines = 4
+                )
+                
+                IconButton(
+                    onClick = { },
+                    enabled = messageText.isNotBlank() && !isResponding,
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Send,
+                        contentDescription = "Enviar",
+                        tint = if (messageText.isNotBlank() && !isResponding) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                        }
+                    )
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
 
