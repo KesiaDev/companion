@@ -304,6 +304,7 @@ private fun AvatarCreationScreenEmptyPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(
     name = "Tela Preenchida (Mock)",
     showBackground = true,
