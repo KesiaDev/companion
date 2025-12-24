@@ -14,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.companion.app.ui.theme.CompanionTheme
 
 /**
  * Seletor de tom de pele com círculos de cor
@@ -80,6 +82,38 @@ fun SkinToneSelector(
                 )
             }
         }
+    }
+}
+
+// ==================== PREVIEWS ====================
+
+@Preview(
+    name = "Skin Tone Selector - Sem Seleção",
+    showBackground = true,
+    widthDp = 360
+)
+@Composable
+private fun SkinToneSelectorEmptyPreview() {
+    CompanionTheme {
+        SkinToneSelector(
+            selectedTone = null,
+            onToneSelected = { }
+        )
+    }
+}
+
+@Preview(
+    name = "Skin Tone Selector - Selecionado",
+    showBackground = true,
+    widthDp = 360
+)
+@Composable
+private fun SkinToneSelectorSelectedPreview() {
+    CompanionTheme {
+        SkinToneSelector(
+            selectedTone = "Médio",
+            onToneSelected = { }
+        )
     }
 }
 

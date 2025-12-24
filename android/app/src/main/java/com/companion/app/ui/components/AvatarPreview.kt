@@ -14,7 +14,9 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.companion.app.ui.theme.CompanionTheme
 
 /**
  * Preview do avatar com microanimações suaves
@@ -239,6 +241,62 @@ private fun getSkinToneColor(skinTone: String): Color {
         "Escuro" -> Color(0xFF8B6F47)
         "Muito escuro" -> Color(0xFF5C4033)
         else -> Color(0xFFD4A574) // Default médio
+    }
+}
+
+// ==================== PREVIEWS ====================
+
+@Preview(
+    name = "Avatar Preview - Completo",
+    showBackground = true,
+    widthDp = 360
+)
+@Composable
+private fun AvatarPreviewCompletePreview() {
+    CompanionTheme {
+        AvatarPreview(
+            avatarName = "Alex",
+            style = "Casual",
+            bodyType = "Médio",
+            faceType = "Oval",
+            hair = "Médio",
+            skinTone = "Médio"
+        )
+    }
+}
+
+@Preview(
+    name = "Avatar Preview - Variações",
+    showBackground = true,
+    widthDp = 360
+)
+@Composable
+private fun AvatarPreviewVariationsPreview() {
+    CompanionTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(32.dp)
+        ) {
+            AvatarPreview(
+                avatarName = "Sam",
+                style = "Formal",
+                bodyType = "Esguio",
+                faceType = "Redondo",
+                hair = "Curto",
+                skinTone = "Claro"
+            )
+            
+            AvatarPreview(
+                avatarName = "Jordan",
+                style = "Relaxado",
+                bodyType = "Robusto",
+                faceType = "Quadrado",
+                hair = "Longo",
+                skinTone = "Escuro"
+            )
+        }
     }
 }
 
