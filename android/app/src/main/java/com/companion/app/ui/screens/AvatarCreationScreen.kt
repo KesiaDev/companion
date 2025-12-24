@@ -195,12 +195,12 @@ fun AvatarCreationScreen(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 faceTypes.forEach { type ->
-                    val icon = when (type) {
-                        "Redondo" -> Icons.Default.Circle
+                    val icon: androidx.compose.ui.graphics.vector.ImageVector? = when (type) {
+                        "Redondo" -> Icons.Default.RadioButtonUnchecked
                         "Oval" -> Icons.Default.Lens
                         "Quadrado" -> Icons.Default.CropSquare
                         "Alongado" -> Icons.Default.CropFree
-                        else -> Icons.Default.Circle
+                        else -> Icons.Default.RadioButtonUnchecked
                     }
                     CustomizationChip(
                         label = type,
