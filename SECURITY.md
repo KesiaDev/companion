@@ -78,3 +78,4 @@ O Companion SEMPRE:
 
 Para questões de segurança ou ética, entre em contato através do app (botão de denúncia) ou diretamente com a equipe.
 
+

@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -15,7 +15,7 @@ model User {
   email         String    @unique
   passwordHash  String
   name          String?
-  age           Int?      // Para validação 18+
+  age           Int?      // Para validação 15+
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -49,18 +49,15 @@ model Avatar {
   @@map("avatars")
 }
 
-enum CompanionType {
-  FRIEND        // Amigo(a)
-  CONFIDANT     // Confidente
-  NEUTRAL       // Companheiro emocional neutro
-}
+// Enum convertido para String para compatibilidade com SQLite
+// Valores: "FRIEND", "CONFIDANT", "NEUTRAL"
 
 model CompanionPreferences {
   id            String   @id @default(cuid())
   userId        String   @unique
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
-  companionType CompanionType
+  companionType String   // FRIEND, CONFIDANT, NEUTRAL
   conversationTone String // Calmo, Animado, Neutro, etc.
   
   createdAt     DateTime @default(now())
@@ -76,10 +73,10 @@ model Memory {
   
   // Memória básica
   userName      String?
-  preferences   Json?    // Preferências de conversa (JSON flexível)
-  recurringThemes Json?  // Temas recorrentes
-  frequentEmotions Json? // Emoções frequentes
-  routine       Json?    // Rotina básica (manhã/noite)
+  preferences   String?  // Preferências de conversa (JSON como String)
+  recurringThemes String?  // Temas recorrentes (JSON como String)
+  frequentEmotions String? // Emoções frequentes (JSON como String)
+  routine       String?    // Rotina básica (JSON como String)
   
   // Contexto evolutivo
   lastInteraction DateTime?
@@ -113,7 +110,7 @@ model Report {
   
   type         String   // "inappropriate_content", "emotional_distress", "other"
   description  String?
-  context      Json?    // Contexto adicional
+  context      String?    // Contexto adicional (JSON como String)
   
   status       String   @default("pending") // pending, reviewed, resolved
   

@@ -188,3 +188,4 @@ Para dúvidas ou problemas, consulte:
 - `PROMPT_BASE.md` - Prompt-base da IA
 - `backend/README.md` - Documentação do backend
 
+

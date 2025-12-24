@@ -24,7 +24,7 @@
 - ✅ Navegação com Navigation Compose
 - ✅ Telas de onboarding:
   - Splash Screen
-  - Verificação de idade (18+)
+  - Verificação de idade (15+)
   - Login/Registro
   - Escolha de tipo de companhia
   - Escolha de tom de conversa
@@ -201,4 +201,5 @@ O prompt-base define:
 ---
 
 **Projeto criado com arquitetura modular, escalável e pronta para produção.**
+
 

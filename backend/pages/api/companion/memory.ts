@@ -18,12 +18,22 @@ async function handler(req: AuthenticatedRequest, res: NextApiResponse) {
       return res.status(404).json({ error: 'Memória não encontrada' })
     }
 
+    // Parse JSON strings para objetos
+    const parseJsonField = (field: string | null | undefined): any => {
+      if (!field) return null
+      try {
+        return JSON.parse(field)
+      } catch {
+        return null
+      }
+    }
+
     return res.status(200).json({
       userName: memory.userName,
-      preferences: memory.preferences,
-      recurringThemes: memory.recurringThemes,
-      frequentEmotions: memory.frequentEmotions,
-      routine: memory.routine,
+      preferences: parseJsonField(memory.preferences),
+      recurringThemes: parseJsonField(memory.recurringThemes),
+      frequentEmotions: parseJsonField(memory.frequentEmotions),
+      routine: parseJsonField(memory.routine),
       lastInteraction: memory.lastInteraction,
       interactionCount: memory.interactionCount,
     })
@@ -34,4 +44,5 @@ async function handler(req: AuthenticatedRequest, res: NextApiResponse) {
 }
 
 export default withAuth(handler)
+
 

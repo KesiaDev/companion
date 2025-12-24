@@ -1,6 +1,6 @@
 # COMPANION — Companhia para o seu dia
 
-Aplicativo de companhia emocional contínua para adultos (18+).
+Aplicativo de companhia emocional contínua para pessoas de 15 anos ou mais.
 
 ## Arquitetura
 

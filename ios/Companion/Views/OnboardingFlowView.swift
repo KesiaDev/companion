@@ -45,10 +45,10 @@ struct AgeVerificationView: View {
                 .font(.largeTitle)
                 .fontWeight(.bold)
             
-            Text("O COMPANION é um aplicativo para adultos (18+).")
+            Text("O COMPANION é um aplicativo para pessoas de 15 anos ou mais.")
                 .multilineTextAlignment(.center)
             
-            Text("Você confirma que tem 18 anos ou mais?")
+            Text("Você confirma que tem 15 anos ou mais?")
                 .fontWeight(.medium)
                 .multilineTextAlignment(.center)
             

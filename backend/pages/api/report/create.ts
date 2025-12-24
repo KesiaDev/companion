@@ -21,7 +21,9 @@ async function handler(req: AuthenticatedRequest, res: NextApiResponse) {
     const report = await prisma.report.create({
       data: {
         userId,
-        ...data,
+        type: data.type,
+        description: data.description,
+        context: data.context ? JSON.stringify(data.context) : null,
       },
     })
 
@@ -36,4 +38,5 @@ async function handler(req: AuthenticatedRequest, res: NextApiResponse) {
 }
 
 export default withAuth(handler)
+
 

@@ -151,3 +151,4 @@ companion/
    - Personalização mais profunda
    - Análise de sentimento avançada
 
+

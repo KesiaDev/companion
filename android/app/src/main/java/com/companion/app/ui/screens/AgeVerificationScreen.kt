@@ -31,14 +31,14 @@ fun AgeVerificationScreen(
         Spacer(modifier = Modifier.height(32.dp))
         
         Text(
-            text = "O COMPANION é um aplicativo para adultos (18+).",
+            text = "O COMPANION é um aplicativo para pessoas de 15 anos ou mais.",
             fontSize = 16.sp
         )
         
         Spacer(modifier = Modifier.height(16.dp))
         
         Text(
-            text = "Você confirma que tem 18 anos ou mais?",
+            text = "Você confirma que tem 15 anos ou mais?",
             fontSize = 16.sp,
             fontWeight = FontWeight.Medium
         )

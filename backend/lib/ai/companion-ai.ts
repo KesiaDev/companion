@@ -116,14 +116,24 @@ async function getCompanionContext(userId: string): Promise<CompanionContext> {
     }),
   ])
 
+  // Parse JSON strings para objetos
+  const parseJsonField = (field: string | null | undefined): any => {
+    if (!field) return undefined
+    try {
+      return JSON.parse(field)
+    } catch {
+      return undefined
+    }
+  }
+
   return {
     userName: user?.name || memory?.userName || undefined,
     companionType: preferences?.companionType || undefined,
     conversationTone: preferences?.conversationTone || undefined,
-    preferences: memory?.preferences || undefined,
-    recurringThemes: memory?.recurringThemes || undefined,
-    frequentEmotions: memory?.frequentEmotions || undefined,
-    routine: memory?.routine || undefined,
+    preferences: parseJsonField(memory?.preferences),
+    recurringThemes: parseJsonField(memory?.recurringThemes),
+    frequentEmotions: parseJsonField(memory?.frequentEmotions),
+    routine: parseJsonField(memory?.routine),
     recentConversations: recentConversations.reverse(),
   }
 }
@@ -190,12 +200,22 @@ export async function updateEmotionalMemory(
     where: { userId },
   })
 
+  // Parse JSON strings para objetos
+  const parseJsonField = (field: string | null | undefined): Record<string, number> => {
+    if (!field) return {}
+    try {
+      return JSON.parse(field)
+    } catch {
+      return {}
+    }
+  }
+
   if (!memory) {
     await prisma.memory.create({
       data: {
         userId,
-        frequentEmotions: { [emotion]: 1 },
-        recurringThemes: theme ? { [theme]: 1 } : {},
+        frequentEmotions: JSON.stringify({ [emotion]: 1 }),
+        recurringThemes: JSON.stringify(theme ? { [theme]: 1 } : {}),
         interactionCount: 1,
         lastInteraction: new Date(),
       },
@@ -203,8 +223,8 @@ export async function updateEmotionalMemory(
     return
   }
 
-  const currentEmotions = (memory.frequentEmotions as Record<string, number>) || {}
-  const currentThemes = (memory.recurringThemes as Record<string, number>) || {}
+  const currentEmotions = parseJsonField(memory.frequentEmotions)
+  const currentThemes = parseJsonField(memory.recurringThemes)
 
   currentEmotions[emotion] = (currentEmotions[emotion] || 0) + 1
   if (theme) {
@@ -214,11 +234,12 @@ export async function updateEmotionalMemory(
   await prisma.memory.update({
     where: { userId },
     data: {
-      frequentEmotions: currentEmotions,
-      recurringThemes: currentThemes,
+      frequentEmotions: JSON.stringify(currentEmotions),
+      recurringThemes: JSON.stringify(currentThemes),
       interactionCount: memory.interactionCount + 1,
       lastInteraction: new Date(),
     },
   })
 }
+
 

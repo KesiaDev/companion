@@ -34,11 +34,12 @@ export const registerSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(8, 'Senha deve ter no mínimo 8 caracteres'),
   name: z.string().optional(),
-  age: z.number().int().min(18, 'Você deve ter 18 anos ou mais').optional(),
+  age: z.number().int().min(15, 'Você deve ter 15 anos ou mais').optional(),
 })
 
 export const loginSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(1, 'Senha é obrigatória'),
 })
+
 

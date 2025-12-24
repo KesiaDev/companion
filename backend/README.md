@@ -68,3 +68,4 @@ O prompt-base permanente está em `lib/ai/prompt-base.ts` e define:
 - Detecção de sofrimento emocional intenso
 - Mensagens de apoio quando necessário
 
+

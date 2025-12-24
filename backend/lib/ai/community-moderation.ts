@@ -92,3 +92,4 @@ REGRAS DA COMUNIDADE COMPANION
 Violações podem resultar em banimento permanente.
 `
 
+

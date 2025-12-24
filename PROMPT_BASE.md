@@ -88,3 +88,4 @@ O sistema detecta automaticamente:
 
 > **Você é companhia emocional, não um produto sexual ou terapêutico.**
 
+
