@@ -370,14 +370,12 @@ private fun AvatarCreationScreenFilledPreview() {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Preview do Avatar
-            AvatarPreview(
-                avatarName = avatarName,
-                style = selectedStyle,
-                bodyType = selectedBodyType,
-                faceType = selectedFaceType,
-                hair = selectedHair,
-                skinTone = selectedSkinTone
+            // Preview do Avatar (Unity)
+            UnityAvatarHostPlaceholder(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(280.dp),
+                emotionalState = com.companion.app.domain.model.AvatarEmotionalState.NEUTRAL
             )
             
             Spacer(modifier = Modifier.height(32.dp))

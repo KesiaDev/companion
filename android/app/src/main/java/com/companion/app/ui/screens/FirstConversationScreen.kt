@@ -336,11 +336,16 @@ private fun FirstConversationScreenWithMockMessagesPreview() {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            // Avatar
-            PresenceAvatar(
-                modifier = Modifier.fillMaxWidth(),
-                isListening = isListening,
-                isResponding = isResponding
+            // Avatar (Unity)
+            UnityAvatarHostPlaceholder(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                emotionalState = when {
+                    isListening -> com.companion.app.domain.model.AvatarEmotionalState.ATTENTIVE
+                    isResponding -> com.companion.app.domain.model.AvatarEmotionalState.SMILING
+                    else -> com.companion.app.domain.model.AvatarEmotionalState.NEUTRAL
+                }
             )
             
             Spacer(modifier = Modifier.height(8.dp))
