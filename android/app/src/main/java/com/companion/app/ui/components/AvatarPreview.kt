@@ -121,7 +121,7 @@ fun AvatarPreview(
                     Box(
                         modifier = Modifier
                             .size(12.dp, 8.dp)
-                            .scale(scaleY = blink)
+                            .scale(scaleX = 1f, scaleY = blink)
                             .clip(RoundedCornerShape(50))
                             .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
@@ -129,7 +129,7 @@ fun AvatarPreview(
                     Box(
                         modifier = Modifier
                             .size(12.dp, 8.dp)
-                            .scale(scaleY = blink)
+                            .scale(scaleX = 1f, scaleY = blink)
                             .clip(RoundedCornerShape(50))
                             .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f))
                     )
@@ -186,7 +186,7 @@ private fun HairStyle(hair: String, modifier: Modifier = Modifier) {
                 modifier = modifier
                     .offset(y = (-20).dp)
                     .size(80.dp, 30.dp)
-                    .clip(RoundedCornerShape(bottomStart = 50, bottomEnd = 50))
+                    .clip(RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomEnd = 50.dp, bottomStart = 50.dp))
                     .background(hairColor)
             )
         }
@@ -195,7 +195,7 @@ private fun HairStyle(hair: String, modifier: Modifier = Modifier) {
                 modifier = modifier
                     .offset(y = (-25).dp)
                     .size(90.dp, 40.dp)
-                    .clip(RoundedCornerShape(bottomStart = 50, bottomEnd = 50))
+                    .clip(RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomEnd = 50.dp, bottomStart = 50.dp))
                     .background(hairColor)
             )
         }
@@ -204,7 +204,7 @@ private fun HairStyle(hair: String, modifier: Modifier = Modifier) {
                 modifier = modifier
                     .offset(y = (-30).dp)
                     .size(100.dp, 50.dp)
-                    .clip(RoundedCornerShape(bottomStart = 50, bottomEnd = 50))
+                    .clip(RoundedCornerShape(topStart = 0.dp, topEnd = 0.dp, bottomEnd = 50.dp, bottomStart = 50.dp))
                     .background(hairColor)
             )
         }
@@ -227,7 +227,7 @@ private fun BodyShape(bodyType: String, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth(widthMultiplier)
-            .clip(RoundedCornerShape(topStart = 50, topEnd = 50))
+            .clip(RoundedCornerShape(topStart = 50.dp, topEnd = 50.dp, bottomEnd = 0.dp, bottomStart = 0.dp))
             .background(bodyColor)
     )
 }
