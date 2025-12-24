@@ -9,6 +9,7 @@ val CompanionPeach = Color(0xFFF4D1AE)           // Pêssego/laranja suave (warm
 val CompanionLightPeach = Color(0xFFF9E5D3)      // Pêssego muito claro
 val CompanionWarmGray = Color(0xFF6B6B6B)        // Cinza quente (texto)
 val CompanionDarkGray = Color(0xFF3A3A3A)        // Cinza escuro (texto principal)
+val CompanionWhite = Color(0xFFFFFFFF)           // Branco (surface claro)
 
 // Para tema escuro (opcional)
 val CompanionDarkBeige = Color(0xFF2A2720)
