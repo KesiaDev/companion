@@ -1,6 +1,6 @@
 package com.companion.app.ui.screens
 
-import androidx.compose.animation.core.animateContentSize
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
